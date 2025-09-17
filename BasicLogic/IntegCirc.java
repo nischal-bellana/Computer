@@ -3,14 +3,10 @@ package BasicLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-enum for_defIC_only{
-	DEFIC
-}
-
 public class IntegCirc extends LogicComponent{
-	public static List<IntegCirc> ICRegister;
-	public static IntegCirc defIC;
-	
+	public static List<IntegCirc> ICRegister = new ArrayList<>();
+	public static IntegCirc defIC = new IntegCirc(true);
+
 	public final int inp;
 	public final int out;
 	public final int regID;
@@ -18,9 +14,13 @@ public class IntegCirc extends LogicComponent{
 	BasicGate[] outputGates;
 	List<BasicGate>[] inputGates;
 	List<Integer>[] inputIDs;
-	
-	public IntegCirc(for_defIC_only  var) {
-		super(BasicGate.sconfig, var);
+
+	/**
+	 * This is constructor for an unique IC which is used as a default IC
+	 * for components that are not really part of any other IC.
+	 * */
+	public IntegCirc(boolean defaultICPassAny) {
+		super(defaultICPassAny);
 		inp = 0;
 		out = 0;
 		regID = ICRegister.size();
@@ -29,7 +29,7 @@ public class IntegCirc extends LogicComponent{
 	}
 	
 	public IntegCirc() {
-		super(BasicGate.sconfig);
+		super();
 		inp = 1;
 		out = 1;
 		regID = ICRegister.size();
@@ -38,7 +38,7 @@ public class IntegCirc extends LogicComponent{
 	}
 	
 	public 	IntegCirc(int inp) {
-		super(BasicGate.sconfig);
+		super();
 		this.inp = inp;
 		out = 1;
 		regID = ICRegister.size();
@@ -47,7 +47,7 @@ public class IntegCirc extends LogicComponent{
 	}
 	
 	public 	IntegCirc(int inp, int out) {
-		super(BasicGate.sconfig);
+		super();
 		this.inp = inp;
 		this.out = out;
 		regID = ICRegister.size();

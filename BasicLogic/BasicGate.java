@@ -6,11 +6,12 @@ import java.util.Deque;
 import java.util.List;
 
 public class BasicGate extends LogicComponent{
-	public static SimuConfig sconfig;
-	public static BasicGate ON;
-	public static BasicGate OFF;
-	public static List<BasicGate> GateRegister;
+	public static List<BasicGate> GateRegister = new ArrayList<>();
+	public static BasicGate ON = new BasicGate(1,1,true);
+	public static BasicGate OFF = new BasicGate(1,1,false);
 	static {
+		BasicGate.ON.connect(0, BasicGate.ON);
+		BasicGate.OFF.connect(0, BasicGate.OFF);
 	}
 	
 	public final int inp;
@@ -21,7 +22,7 @@ public class BasicGate extends LogicComponent{
 	private boolean output = false;
 	
 	public BasicGate() {
-		super(sconfig);
+		super();
 		inp = 2;
 		regID = GateRegister.size();
 		GateRegister.add(this);
@@ -29,7 +30,7 @@ public class BasicGate extends LogicComponent{
 	}
 	
 	public BasicGate(float delay) {
-		super(sconfig);
+		super();
 		inp = 2;
 		this.delay = delay;
 		regID = GateRegister.size();
@@ -38,7 +39,7 @@ public class BasicGate extends LogicComponent{
 	}
 	
 	public BasicGate(float delay, int inp) {
-		super(sconfig);
+		super();
 		this.delay = delay;
 		this.inp = inp;
 		regID = GateRegister.size();
@@ -47,7 +48,7 @@ public class BasicGate extends LogicComponent{
 	}
 	
 	public BasicGate(float delay, int inp, boolean output) {
-		super(sconfig);
+		super();
 		this.delay = delay;
 		this.inp = inp;
 		this.output = output;
@@ -57,7 +58,7 @@ public class BasicGate extends LogicComponent{
 	}
 	
 	public BasicGate(float delay, int inp, IntegCirc IC, boolean[] initinp) {
-		super(sconfig, IC);
+		super(IC);
 		this.delay = delay;
 		this.inp = inp;
 		regID = GateRegister.size();
@@ -79,7 +80,7 @@ public class BasicGate extends LogicComponent{
 			inpBuffer[i] = new ArrayDeque<Boolean>();
 			
 			for(int j=0; j<=size; j++) {
-				inpBuffer[i].offer(initinp==null?false:initinp[i]);
+				inpBuffer[i].offer(initinp != null && initinp[i]);
 			}
 		}
 		
