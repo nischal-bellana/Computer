@@ -46,7 +46,7 @@ public class BasicGate extends LogicComponent{
 		GateRegister.add(this);
 		setStates(null);
 	}
-	
+
 	public BasicGate(float delay, int inp, boolean output) {
 		super();
 		this.delay = delay;
@@ -99,7 +99,7 @@ public class BasicGate extends LogicComponent{
 	}
 	
 	public void simOut() {
-		
+		setOutput(Boolean.TRUE.equals(inpBuffer[inp - 1].pollLast()));
 	}
 	
 	public void inpUpd() {
@@ -107,11 +107,12 @@ public class BasicGate extends LogicComponent{
 			inpBuffer[i].offerFirst(inputs[i].Output());
 		}
 	}
-	
+
+	@Override
 	public void connect(int inpID, BasicGate other) {
 		inputs[inpID] = other;
 	}
-	
+
 	public void printBuffer() {
 		for(int i=0; i<inp; i++) {
 			System.out.print("[");

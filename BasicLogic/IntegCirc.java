@@ -90,7 +90,8 @@ public class IntegCirc extends LogicComponent{
 	public boolean Output(int outID) {
 		return outputGates[outID].Output();
 	}
-	
+
+	@Override
 	public void connect(int inpID, BasicGate gate) {
 		List<BasicGate> list1 = inputGates[inpID];
 		List<Integer> list2 = inputIDs[inpID];

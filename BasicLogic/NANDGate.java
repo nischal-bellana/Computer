@@ -31,7 +31,7 @@ public class NANDGate extends BasicGate{
 		// TODO Auto-generated method stub
 		setOutput(false);
 		for(int i=0; i<inp; i++) {
-			if(!inpBuffer[i].pollLast()) setOutput(true);
+			if(Boolean.FALSE.equals(inpBuffer[i].pollLast())) setOutput(true);
 		}
 	}
 	

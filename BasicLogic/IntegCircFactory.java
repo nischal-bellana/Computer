@@ -2,10 +2,6 @@ package BasicLogic;
 
 public class IntegCircFactory {
 	private ICtypes type = ICtypes.CLK;
-	
-	public IntegCircFactory() {
-		
-	}
 
 	public ICtypes getType() {
 		return type;
@@ -15,17 +11,13 @@ public class IntegCircFactory {
 	}
 	
 	public IntegCirc getIC() {
-		switch(type) {
-		case CLK:
-			return createCLK();
-		case JK:
-			return createJK();
-		case ED:
-			return createED();
-		}
-		return IntegCirc.defIC;
-		
-	}
+        return switch (type) {
+            case CLK -> createCLK();
+            case JK -> createJK();
+            case ED -> createED();
+        };
+
+    }
 	
 	private IntegCirc createCLK() {
 		IntegCirc clock = new IntegCirc(0,1);

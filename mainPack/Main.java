@@ -1,65 +1,72 @@
 package mainPack;
 
+import java.awt.*;
+import java.util.Deque;
 import java.util.List;
 
-import BasicLogic.BasicGate;
-import BasicLogic.ICtypes;
-import BasicLogic.IntegCirc;
-import BasicLogic.IntegCircFactory;
+import BasicLogic.*;
+
+import javax.swing.*;
 
 public class Main {
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws InterruptedException {
 		long Ts = (int)(BasicGate.ON.getTs()*1000);
-		
+
 		IntegCircFactory icfac = new IntegCircFactory();
+		icfac.setType(ICtypes.CLK);
 		IntegCirc clock = icfac.getIC();
-		
-		icfac.setType(ICtypes.ED);
-		IntegCirc ed = icfac.getIC();
-		
-		ed.connect(0, clock.getOutputGate(0));
-		
-		icfac.setType(ICtypes.JK);
-		IntegCirc jk = icfac.getIC();
-		
-		jk.connect(0, BasicGate.ON);
-		jk.connect(1, BasicGate.ON);
-		jk.connect(2, BasicGate.ON);
-		
+		LogicComponent.handbag.put("clock", clock);
+
+		Thread th = new Thread(new MyPanel());
+		th.start();
+
 		long startTime = System.currentTimeMillis();
-		long curTime = 0;
-		
-		while(curTime/1000<30) {
-			curTime = System.currentTimeMillis()-startTime;
-			
-			simulateAll();
-			
-			System.out.printf("\r%.2f ",curTime/1000f);
-			System.out.printf("%c %c %c %c ",clock.Output(0)?'T':'F', jk.Output(0)?'T':'F', jk.Output(1)?'T':'F', ed.Output(0)?'T':'F');
-			System.out.print("   ");
-			
-			
-			try {
-				Thread.sleep(Ts);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		long currentTime = 0;
+
+		while(currentTime/1000 < 30){
+			currentTime = System.currentTimeMillis() - startTime;
+
+			stepSimulate();
+
+			System.out.print("\r" + (clock.getOutputGate(0).Output()?"T":"F"));
+
+			Thread.sleep(Ts);
 		}
-		
+
 	}
 	
-	public static void simulateAll() {
+	public static void stepSimulate() {
 		List<BasicGate> lis = BasicGate.GateRegister;
-		
-		for(int i=0; i<lis.size(); i++) {
-			lis.get(i).simOut();
-		}
-		for(int i=0; i<lis.size(); i++) {
-			lis.get(i).inpUpd();
-		}
+
+        for (BasicGate li : lis) {
+            li.simOut();
+        }
+        for (BasicGate li : lis) {
+            li.inpUpd();
+        }
 		
 	}
-	
+
+	public static void resetLine(){
+		System.out.print("\r");
+		for(int i = 0; i < 200; i++){
+			System.out.print("-");
+		}
+		System.out.print("\r");
+	}
+
+	public static void printClockBuffer(Deque<Boolean> inpbuffer){
+		boolean val = inpbuffer.getFirst();
+
+		for (boolean it: inpbuffer){
+			if(val^it){
+				System.out.print("|");
+				val = it;
+			}
+			System.out.print(val ? "`" : "_");
+		}
+
+	}
+
 }
