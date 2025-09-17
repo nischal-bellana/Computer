@@ -16,7 +16,7 @@ public class MyPanel extends JPanel implements Runnable {
         IntegCirc clock = (IntegCirc)LogicComponent.handbag.get("clock");
         output.offerFirst(clock.getOutputGate(0).Output());
 
-        while(output.size() > 20){
+        while(output.size() > 30){
             output.pollLast();
         }
 
